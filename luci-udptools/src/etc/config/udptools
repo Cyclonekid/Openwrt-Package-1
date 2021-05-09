@@ -1,0 +1,12 @@
+
+config udpconfig
+	option password 'wallbreaker'
+	option auto '1'
+	option enable '1'
+	option serverport '55886'
+	option clientport '55887'
+	option fec '20:10'
+	option server '192.168.55.1'
+	option client '127.0.0.1'
+	option timeout '8'
+
