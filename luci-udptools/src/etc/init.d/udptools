@@ -3,6 +3,10 @@ START=98
 
 run_udp()
 {
+	hostip=$(ping wg.wallbreaker.monster -c1|awk '$1=="PING" {print $3}'|awk -F"(" '{print $2}'|awk -F")" '{print $1}')
+	ip route add $hostip via $(ip route | awk '$1=="default" {print $3}')
+	uci set udptools.@udpconfig[0].server=$hostip
+	uci commit
 	local server
 	local serverport
 	local client
@@ -18,10 +22,10 @@ run_udp()
 	config_get password $1 password  
 	config_get fec $1 fec  
 	config_get timeout $1 timeout
-	(udpspeeder -c -l$client:$clientport -r127.0.0.1:21333 -f$fec --mode 0 --timeout $timeout >/dev/null 2>&1 )&
+	
+	# (udpspeeder -c -l$client:$clientport -r127.0.0.1:21333 -f$fec --mode 0 --timeout $timeout >/dev/null 2>&1 )&
 	(udp2raw -c -l127.0.0.1:21333 -r$server:$serverport --raw-mode faketcp -a -k $password >/dev/null 2>&1 )&
-	# ip route add $server via $(ip route | awk '$1=="default" {print $3}')
-	ip route add $(ping wallbreaker.monster -c1|awk '$1=="PING" {print $3}'|awk -F"(" '{print $2}'|awk -F")" '{print $1}') via $(ip route | awk '$1=="default" {print $3}')
+	
 }
 
 start()
