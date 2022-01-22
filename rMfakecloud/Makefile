@@ -40,6 +40,8 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) ./fakecloud.conf $(1)/etc/nginx/conf.d
 	$(INSTALL_DIR) $(1)/etc/dnsmasq.d
 	$(INSTALL_DATA) ./reMarkable.conf $(1)/etc/dnsmasq.d
+	$(INSTALL_DATA) ./proxy.bundle.crt $(1)/etc/nginx/conf.d
+	$(INSTALL_DATA) ./proxy.key $(1)/etc/nginx/conf.d
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))
