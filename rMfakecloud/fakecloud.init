@@ -10,16 +10,16 @@ SERVICE_WRITE_PID=1
 SERVICE_DAEMONIZE=1
 
 start() {
-	export JWT_SECRET_KEY=BjHf5MEaRSCXQ4BDyAIZNluBrdug2HsslbjpZW9aPJd6vdjnuPI9F+Th8Wxw6A5o
+	export JWT_SECRET_KEY=BjHf5MEaRSCXQ4BDyAIZNluBrdug2HsslbjpZW9aPJd6vdjnuPI9F+Th8Wx11111
 	export PORT=3000
 	export DATADIR=/mnt/sda1/cloud
 	export LOGLEVEL=error
 	export RM_SMTP_SERVER=smtp.qq.com:465
-	export RM_SMTP_USERNAME=360350064@qq.com
-	export RM_SMTP_PASSWORD=itvvnhmfynrdbgci
-	export RM_SMTP_FROM='360350064 <360350064@qq.com>'
-	export RMAPI_HWR_APPLICATIONKEY=b628d691-93a5-4add-b51c-59ad6d74bed8
-	export RMAPI_HWR_HMAC=3bc7600d-a460-4597-9118-4f9e1b7c6af2
+	export RM_SMTP_USERNAME=36351164@qq.com
+	export RM_SMTP_PASSWORD=itvvnhmfynr11111
+	export RM_SMTP_FROM='36351164 <36351164@qq.com>'
+	export RMAPI_HWR_APPLICATIONKEY=b628d691-93a5-4add-b51c-59ad6d711111
+	export RMAPI_HWR_HMAC=3bc7600d-a460-4597-9118-4f9e1b711111
 	service_start /usr/bin/fakecloud
 }
 
