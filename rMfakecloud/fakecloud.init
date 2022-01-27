@@ -10,7 +10,7 @@ SERVICE_WRITE_PID=1
 SERVICE_DAEMONIZE=1
 
 start() {
-	export JWT_SECRET_KEY=BjHf5MEaRSCXQ4BDyAIZNluBrdug2HsslbjpZW9aPJd6vdjnuPI9F+Th8Wx11111
+	export JWT_SECRET_KEY=aljj/5ApXgHdrqnF1bOhzPQnTtyGWOMZFSvQRgx8smhGY6Q4S30fVWbpARSxECjM
 	export PORT=3000
 	export DATADIR=/mnt/sda1/cloud
 	export LOGLEVEL=error
