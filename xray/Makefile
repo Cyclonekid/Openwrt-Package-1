@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=xray-LZMA
+PKG_NAME:=xray-core
 PKG_VERSION:=1.5.3
 PKG_RELEASE:=$(AUTORELEASE)
 
@@ -27,7 +27,7 @@ GO_PKG_LDFLAGS_X:= \
 include $(INCLUDE_DIR)/package.mk
 include $(TOPDIR)/feeds/packages/lang/golang/golang-package.mk
 
-define Package/$(PKG_NAME)
+define Package/xray-LZMA
   TITLE:=A platform for building proxies to bypass network restrictions
   SECTION:=net
   CATEGORY:=Network
@@ -35,7 +35,7 @@ define Package/$(PKG_NAME)
   DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle
 endef
 
-define Package/$(PKG_NAME)/description
+define Package/xray-LZMA/description
   Xray, Penetrates Everything. Also the best v2ray-core, with XTLS support. Fully compatible configuration.
   It secures your network connections and thus protects your privacy.
 endef
@@ -47,9 +47,9 @@ define Build/Compile
 	$(STAGING_DIR_HOST)/bin/upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/xray || true
 endef
 
-define Package/$(PKG_NAME)/install
+define Package/xray-LZMA/install
 	$(INSTALL_DIR) $(1)/usr/bin/
 	$(INSTALL_BIN) $(GO_PKG_BUILD_BIN_DIR)/xray $(1)/usr/bin
 endef
 
-$(eval $(call BuildPackage,$(PKG_NAME)))
+$(eval $(call BuildPackage,xray-LZMA))
