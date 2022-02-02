@@ -7,7 +7,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=udpspeeder
+PKG_NAME:=udpspeeder-tunnel
 PKG_VERSION:=20211209
 PKG_RELEASE:=1
 
@@ -27,7 +27,7 @@ PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/udpspeeder-tunnel
+define Package/$(PKG_NAME)
 	SECTION:=net
 	CATEGORY:=Network
 	TITLE:=UDP Network Speed-Up Tool
@@ -35,7 +35,7 @@ define Package/udpspeeder-tunnel
 	DEPENDS:= +libstdcpp +librt
 endef
 
-define Package/udpspeeder-tunnel/description
+define Package/$(PKG_NAME)/description
 	 A Tunnel which Improves your Network Quality on a High-latency Lossy Link by using Forward Error Correction,for All Traffics(TCP/UDP/ICMP)
 endef
 
@@ -49,9 +49,9 @@ define Build/Prepare
 	$(Build/Patch)
 endef
 
-define Package/udpspeeder-tunnel/install
+define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/speederv2_cross $(1)/usr/bin/udpspeeder
 endef
 
-$(eval $(call BuildPackage,udpspeeder-tunnel))
+$(eval $(call BuildPackage,$(PKG_NAME)))
