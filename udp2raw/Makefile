@@ -27,7 +27,7 @@ PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/udp2raw-tunnel
+define Package/$(PKG_NAME)
 	SECTION:=net
 	CATEGORY:=Network
 	TITLE:=Tunnel which turns UDP Traffic into Encrypted FakeTCP/UDP/ICMP Traffic
@@ -49,9 +49,9 @@ define Build/Prepare
 	$(Build/Patch)
 endef
 
-define Package/udp2raw-tunnel/install
+define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/udp2raw_cross $(1)/usr/bin/udp2raw
 endef
 
-$(eval $(call BuildPackage,udp2raw-tunnel))
+$(eval $(call BuildPackage,$(PKG_NAME)))
