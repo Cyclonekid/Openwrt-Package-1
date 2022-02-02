@@ -17,8 +17,8 @@ PKG_BUILD_DEPENDS:=golang/host
 PKG_BUILD_PARALLEL:=1
 PKG_USE_MIPS16:=0
 
-GO_PKG:=github.com/xtls/$(PKG_NAME)
-GO_PKG_BUILD_PKG:=github.com/xtls/$(PKG_NAME)/main
+GO_PKG:=github.com/xtls/xray-core
+GO_PKG_BUILD_PKG:=github.com/xtls/xray-core/main
 GO_PKG_LDFLAGS:=-s -w
 GO_PKG_LDFLAGS_X:= \
 	$(GO_PKG)/core.build=OpenWrt \
