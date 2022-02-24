@@ -88,5 +88,6 @@ start_service() {
 }
 
 stop_service() {
+	del_ip_rules
 	kill $(ps | grep xray | awk '/-confdir/ {print $1}')
 }
