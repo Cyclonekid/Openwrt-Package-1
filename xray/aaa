@@ -8,54 +8,54 @@ PROG=/usr/bin/xray
 CONFFILE=/etc/xray/config.json
 
 add_ip_rules() {
-  ulimit -n 100000
-  ip rule add fwmark 1 table 100
-  ip route add local 0.0.0.0/0 dev lo table 100
+	ulimit -n 100000
+	ip rule add fwmark 1 table 100
+	ip route add local 0.0.0.0/0 dev lo table 100
 
-  iptables -t mangle -N XRAY
-  iptables -t mangle -A XRAY -d $(ip route|awk '$1=="default" {print $3"/16"}') -j RETURN
-  iptables -t mangle -A XRAY -d $(ip addr show br-lan|awk '$1=="inet" {print $2}'|awk -F/ '{print $1"/16"}') -j RETURN
-  iptables -t mangle -A XRAY -d 10.0.0.0/8 -j RETURN
-  iptables -t mangle -A XRAY -d 100.64.0.0/10 -j RETURN
-  iptables -t mangle -A XRAY -d 127.0.0.0/8 -j RETURN
-  iptables -t mangle -A XRAY -d 169.254.0.0/16 -j RETURN
-  iptables -t mangle -A XRAY -d 172.16.0.0/12 -j RETURN
-  iptables -t mangle -A XRAY -d 192.0.0.0/24 -j RETURN
-  iptables -t mangle -A XRAY -d 224.0.0.0/4 -j RETURN
-  iptables -t mangle -A XRAY -d 240.0.0.0/4 -j RETURN
-  iptables -t mangle -A XRAY -d 255.255.255.255/32 -j RETURN
-  iptables -t mangle -A XRAY -p udp -m set --match-set forceproxy dst -j TPROXY --on-port 12345 --tproxy-mark 1
-  iptables -t mangle -A XRAY -p tcp -m set --match-set forceproxy dst -j TPROXY --on-port 12345 --tproxy-mark 1
-  iptables -t mangle -A XRAY -p udp -m set --match-set gfwlist dst -j TPROXY --on-port 12345 --tproxy-mark 1
-  iptables -t mangle -A XRAY -p tcp -m set --match-set gfwlist dst -j TPROXY --on-port 12345 --tproxy-mark 1
-  iptables -t mangle -A XRAY -m set --match-set Cloudflare dst -j RETURN
-  iptables -t mangle -A XRAY -m set --match-set China dst -j RETURN
-  iptables -t mangle -A XRAY -p udp -j TPROXY --on-port 12345 --tproxy-mark 1
-  iptables -t mangle -A XRAY -p tcp -j TPROXY --on-port 12345 --tproxy-mark 1
-  iptables -t mangle -A PREROUTING -j XRAY
+	iptables -t mangle -N XRAY
+	iptables -t mangle -A XRAY -d $(ip route|awk '$1=="default" {print $3"/16"}') -j RETURN
+	iptables -t mangle -A XRAY -d $(ip addr show br-lan|awk '$1=="inet" {print $2}'|awk -F/ '{print $1"/16"}') -j RETURN
+	iptables -t mangle -A XRAY -d 10.0.0.0/8 -j RETURN
+	iptables -t mangle -A XRAY -d 100.64.0.0/10 -j RETURN
+	iptables -t mangle -A XRAY -d 127.0.0.0/8 -j RETURN
+	iptables -t mangle -A XRAY -d 169.254.0.0/16 -j RETURN
+	iptables -t mangle -A XRAY -d 172.16.0.0/12 -j RETURN
+	iptables -t mangle -A XRAY -d 192.0.0.0/24 -j RETURN
+	iptables -t mangle -A XRAY -d 224.0.0.0/4 -j RETURN
+	iptables -t mangle -A XRAY -d 240.0.0.0/4 -j RETURN
+	iptables -t mangle -A XRAY -d 255.255.255.255/32 -j RETURN
+	iptables -t mangle -A XRAY -p udp -m set --match-set forceproxy dst -j TPROXY --on-port 12345 --tproxy-mark 1
+	iptables -t mangle -A XRAY -p tcp -m set --match-set forceproxy dst -j TPROXY --on-port 12345 --tproxy-mark 1
+	iptables -t mangle -A XRAY -p udp -m set --match-set gfwlist dst -j TPROXY --on-port 12345 --tproxy-mark 1
+	iptables -t mangle -A XRAY -p tcp -m set --match-set gfwlist dst -j TPROXY --on-port 12345 --tproxy-mark 1
+	iptables -t mangle -A XRAY -m set --match-set Cloudflare dst -j RETURN
+	iptables -t mangle -A XRAY -m set --match-set China dst -j RETURN
+	iptables -t mangle -A XRAY -p udp -j TPROXY --on-port 12345 --tproxy-mark 1
+	iptables -t mangle -A XRAY -p tcp -j TPROXY --on-port 12345 --tproxy-mark 1
+	iptables -t mangle -A PREROUTING -j XRAY
 
-  iptables -t mangle -N XRAY_MASK
-  iptables -t mangle -A XRAY_MASK -d $(ip route|awk '$1=="default" {print $3"/16"}') -j RETURN
-  iptables -t mangle -A XRAY_MASK -d $(ip addr show br-lan|awk '$1=="inet" {print $2}'|awk -F/ '{print $1"/16"}') -j RETURN
-  iptables -t mangle -A XRAY_MASK -d 10.0.0.0/8 -j RETURN
-  iptables -t mangle -A XRAY_MASK -d 100.64.0.0/10 -j RETURN
-  iptables -t mangle -A XRAY_MASK -d 127.0.0.0/8 -j RETURN
-  iptables -t mangle -A XRAY_MASK -d 169.254.0.0/16 -j RETURN
-  iptables -t mangle -A XRAY_MASK -d 172.16.0.0/12 -j RETURN
-  iptables -t mangle -A XRAY_MASK -d 192.0.0.0/24 -j RETURN
-  iptables -t mangle -A XRAY_MASK -d 224.0.0.0/4 -j RETURN
-  iptables -t mangle -A XRAY_MASK -d 240.0.0.0/4 -j RETURN
-  iptables -t mangle -A XRAY_MASK -d 255.255.255.255/32 -j RETURN
-  iptables -t mangle -A XRAY_MASK -p udp -m set --match-set forceproxy dst -j MARK --set-mark 1
-  iptables -t mangle -A XRAY_MASK -p tcp -m set --match-set forceproxy dst -j MARK --set-mark 1
-  iptables -t mangle -A XRAY_MASK -p udp -m set --match-set gfwlist dst -j MARK --set-mark 1
-  iptables -t mangle -A XRAY_MASK -p tcp -m set --match-set gfwlist dst -j MARK --set-mark 1
-  iptables -t mangle -A XRAY_MASK -m set --match-set Cloudflare dst -j RETURN
-  iptables -t mangle -A XRAY_MASK -m set --match-set China dst -j RETURN
-  iptables -t mangle -A XRAY_MASK -j RETURN -m mark --mark 0xff
-  iptables -t mangle -A XRAY_MASK -p udp -j MARK --set-mark 1
-  iptables -t mangle -A XRAY_MASK -p tcp -j MARK --set-mark 1
-  iptables -t mangle -A OUTPUT -j XRAY_MASK
+	iptables -t mangle -N XRAY_MASK
+	iptables -t mangle -A XRAY_MASK -d $(ip route|awk '$1=="default" {print $3"/16"}') -j RETURN
+	iptables -t mangle -A XRAY_MASK -d $(ip addr show br-lan|awk '$1=="inet" {print $2}'|awk -F/ '{print $1"/16"}') -j RETURN
+	iptables -t mangle -A XRAY_MASK -d 10.0.0.0/8 -j RETURN
+	iptables -t mangle -A XRAY_MASK -d 100.64.0.0/10 -j RETURN
+	iptables -t mangle -A XRAY_MASK -d 127.0.0.0/8 -j RETURN
+	iptables -t mangle -A XRAY_MASK -d 169.254.0.0/16 -j RETURN
+	iptables -t mangle -A XRAY_MASK -d 172.16.0.0/12 -j RETURN
+	iptables -t mangle -A XRAY_MASK -d 192.0.0.0/24 -j RETURN
+	iptables -t mangle -A XRAY_MASK -d 224.0.0.0/4 -j RETURN
+	iptables -t mangle -A XRAY_MASK -d 240.0.0.0/4 -j RETURN
+	iptables -t mangle -A XRAY_MASK -d 255.255.255.255/32 -j RETURN
+	iptables -t mangle -A XRAY_MASK -p udp -m set --match-set forceproxy dst -j MARK --set-mark 1
+	iptables -t mangle -A XRAY_MASK -p tcp -m set --match-set forceproxy dst -j MARK --set-mark 1
+	iptables -t mangle -A XRAY_MASK -p udp -m set --match-set gfwlist dst -j MARK --set-mark 1
+	iptables -t mangle -A XRAY_MASK -p tcp -m set --match-set gfwlist dst -j MARK --set-mark 1
+	iptables -t mangle -A XRAY_MASK -m set --match-set Cloudflare dst -j RETURN
+	iptables -t mangle -A XRAY_MASK -m set --match-set China dst -j RETURN
+	iptables -t mangle -A XRAY_MASK -j RETURN -m mark --mark 0xff
+	iptables -t mangle -A XRAY_MASK -p udp -j MARK --set-mark 1
+	iptables -t mangle -A XRAY_MASK -p tcp -j MARK --set-mark 1
+	iptables -t mangle -A OUTPUT -j XRAY_MASK
 }
 
 del_ip_rules() {
@@ -69,21 +69,24 @@ del_ip_rules() {
 	ip route flush table 100
 }
 
-service_triggers()
-{
-        procd_add_reload_trigger "<uci-file-name>" "<second-uci-file>"
-        procd_add_reload_interface_trigger <interface>
+service_triggers() {
+	procd_add_reload_trigger "network" "dhcp"
+	procd_add_reload_interface_trigger interface.*
 }
 
 start_service() {
-  del_ip_rules
-  add_ip_rules
-  procd_open_instance xray
-  procd_set_param command "$PROG"
-  procd_append_param command -config="$CONFFILE"
-  procd_set_param stdout 1
-  procd_set_param stderr 1
-  procd_set_param file $CONFFILE
-  procd_set_param pidfile /var/run/xray
-  procd_close_instance
+	del_ip_rules
+	add_ip_rules
+	procd_open_instance xray
+	procd_set_param command "$PROG"
+	procd_append_param command -config="$CONFFILE"
+	procd_set_param stdout 1
+	procd_set_param stderr 1
+	procd_set_param file $CONFFILE
+	procd_set_param pidfile /var/run/xray
+	procd_close_instance
+}
+
+stop_service() {
+	kill $(ps | grep xray | awk '/-confdir/ {print $1}')
 }
