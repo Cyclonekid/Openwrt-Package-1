@@ -1,0 +1,89 @@
+{
+	"log": {
+		"access": "/etc/xray/access.log",
+		"error": "/etc/xray/error.log",
+		"loglevel": "none"
+	},
+	"inbounds": [{
+		"tag": "transparent",
+		"port": 12345,
+		"protocol": "dokodemo-door",
+		"settings": {
+			"network": "tcp,udp",
+			"followRedirect": true
+		},
+		"sniffing": {
+			"enabled": true,
+			"destOverride": [
+				"http",
+				"tls"
+			]
+		},
+		"streamSettings": {
+			"sockopt": {
+				"tproxy": "tproxy"
+			}
+		}
+	}],
+	"outbounds": [{
+			"tag": "proxy",
+			"protocol": "vless",
+			"streamSettings": {
+				"network": "ws",
+				"security": "tls",
+				"wsSettings": {
+					"path": "/websocket?ed=2048",
+					"headers": {
+						"Host": "wallbreaker.monster"
+					}
+				},
+				"tlsSettings": {
+					"allowInsecure": false,
+					"serverName": "wallbreaker.monster"
+				},
+				"sockopt": {
+					"mark": 255
+				}
+			},
+			"settings": {
+				"vnext": [{
+					"address": "wallbreaker.monster",
+					"port": 443,
+					"users": [{
+						"id": "971A4786-A481-7819-4F8C-6F78B1011111",
+						"encryption": "none",
+						"level": 0
+					}]
+				}]
+			}
+		},
+		{
+			"tag": "direct",
+			"protocol": "freedom",
+			"streamSettings": {
+				"sockopt": {
+					"mark": 255
+				}
+			}
+		},
+		{
+			"tag": "block",
+			"protocol": "blackhole",
+			"settings": {
+				"response": {
+					"type": "http"
+				}
+			}
+		}
+	],
+	"routing": {
+		"domainStrategy": "IPOnDemand",
+		"rules": [{
+			"type": "field",
+			"protocol": [
+				"bittorrent"
+			],
+			"outboundTag": "direct"
+		}]
+	}
+}
