@@ -50,6 +50,10 @@ endef
 define Package/xray-LZMA/install
 	$(INSTALL_DIR) $(1)/usr/bin/
 	$(INSTALL_BIN) $(GO_PKG_BUILD_BIN_DIR)/xray $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./xray.init $(1)/etc/init.d/xray
+	$(INSTALL_DIR) $(1)/etc/xray
+	$(INSTALL_DATA) ./config.json $(1)/etc/xray
 endef
 
 $(eval $(call BuildPackage,xray-LZMA))
