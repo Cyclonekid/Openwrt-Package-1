@@ -1,38 +1,36 @@
 #!/bin/sh /etc/rc.common
-# "new(er)" style init script
-# Look at /lib/functions/service.sh on a running system for explanations of what other SERVICE_
-# options you can use, and when you might want them.
+# Copyright (C) 2020-2022 Leo Zhao <skygunner5@hotmail.com>
+# Licensed to the public under the Apache License 2.0.
 
 START=99
+USE_PROCD=1
+PROG=/usr/bin/fakecloud
 
-SERVICE_USE_PID=1
-SERVICE_WRITE_PID=1
-SERVICE_DAEMONIZE=1
-
-start() {
-	export JWT_SECRET_KEY=aljj/5ApXgHdrqnF1bOhzPQnTtyGWOMZFSvQRgx8smhGY6Q4S30fVWbpARSxECjM
-	export PORT=3000
-	export DATADIR=/mnt/sda1/cloud
-	export LOGLEVEL=error
-	export RM_SMTP_SERVER=smtp.qq.com:465
-	export RM_SMTP_USERNAME=yours@qq.com
-	export RM_SMTP_PASSWORD=yours
-	export RM_SMTP_FROM='yours <yours@qq.com>'
-	export RMAPI_HWR_APPLICATIONKEY=b628d691-93a5-4add-b51c-59ad6d711111
-	export RMAPI_HWR_HMAC=3bc7600d-a460-4597-9118-4f9e1b711111
-	service_start /usr/bin/fakecloud
+start_service() {
+	procd_open_instance fakecloud
+	procd_set_param command "$PROG"
+	procd_set_param env JWT_SECRET_KEY=aljj/5ApXgHdrqnF1bOhzPQnTtyGWOMZFSvQRgx8smhGY6Q4S30fVWbpARSxECjM \
+			    PORT=3000 \
+			    DATADIR=/mnt/sda1/cloud \
+			    LOGLEVEL=error \
+			    RM_SMTP_SERVER=smtp.qq.com:465 \
+			    RM_SMTP_USERNAME=yours@qq.com \
+			    RM_SMTP_PASSWORD=yours \
+			    RM_SMTP_FROM='yours <yours@qq.com>' \
+			    RMAPI_HWR_APPLICATIONKEY=b628d691-93a5-4add-b51c-59ad6d711111 \
+			    RMAPI_HWR_HMAC=3bc7600d-a460-4597-9118-4f9e1b711111
+	procd_set_param stdout 1
+	procd_set_param stderr 1
+	procd_set_param pidfile /var/run/fakecloud
+	procd_close_instance
 }
 
-stop() {
-	unset JWT_SECRET_KEY
-	unset PORT
-	unset DATADIR
-	unset LOGLEVEL
-	unset RM_SMTP_SERVER
-	unset RM_SMTP_USERNAME
-	unset RM_SMTP_PASSWORD
-	unset RM_SMTP_FROM
-	unset RMAPI_HWR_APPLICATIONKEY
-	unset RMAPI_HWR_HMAC
-	service_stop /usr/bin/fakecloud
+stop_service() {
+	kill $(cat /var/run/fakecloud)
+}
+
+reload_service()
+{
+	stop
+	start
 }
