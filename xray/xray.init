@@ -12,7 +12,7 @@ add_ip_rules() {
 	ip route add local 0.0.0.0/0 dev lo table 100
 
 	iptables -t mangle -N XRAY
-	iptables -t mangle -A XRAY -d $(ip route|awk '$1=="default" {print $3"/16"}') -j RETURN
+	iptables -t mangle -A XRAY -d $(ip route|awk '$1=="default" {print $3}') -j RETURN
 	iptables -t mangle -A XRAY -d $(ip addr show br-lan|awk '$1=="inet" {print $2}'|awk -F/ '{print $1"/16"}') -j RETURN
 	iptables -t mangle -A XRAY -d 10.0.0.0/8 -j RETURN
 	iptables -t mangle -A XRAY -d 100.64.0.0/10 -j RETURN
@@ -34,7 +34,7 @@ add_ip_rules() {
 	iptables -t mangle -A PREROUTING -j XRAY
 
 	iptables -t mangle -N XRAY_MASK
-	iptables -t mangle -A XRAY_MASK -d $(ip route|awk '$1=="default" {print $3"/16"}') -j RETURN
+	iptables -t mangle -A XRAY_MASK -d $(ip route|awk '$1=="default" {print $3}') -j RETURN
 	iptables -t mangle -A XRAY_MASK -d $(ip addr show br-lan|awk '$1=="inet" {print $2}'|awk -F/ '{print $1"/16"}') -j RETURN
 	iptables -t mangle -A XRAY_MASK -d 10.0.0.0/8 -j RETURN
 	iptables -t mangle -A XRAY_MASK -d 100.64.0.0/10 -j RETURN
