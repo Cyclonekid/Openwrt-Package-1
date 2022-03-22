@@ -23,12 +23,12 @@ add_ip_rules() {
 	iptables -t mangle -A XRAY -d 224.0.0.0/4 -j RETURN
 	iptables -t mangle -A XRAY -d 240.0.0.0/4 -j RETURN
 	iptables -t mangle -A XRAY -d 255.255.255.255/32 -j RETURN
+	iptables -t mangle -A XRAY -m set --match-set China dst -j RETURN
 	iptables -t mangle -A XRAY -p udp -m set --match-set forceproxy dst -j TPROXY --on-port 12345 --tproxy-mark 1
 	iptables -t mangle -A XRAY -p tcp -m set --match-set forceproxy dst -j TPROXY --on-port 12345 --tproxy-mark 1
 	iptables -t mangle -A XRAY -p udp -m set --match-set gfwlist dst -j TPROXY --on-port 12345 --tproxy-mark 1
 	iptables -t mangle -A XRAY -p tcp -m set --match-set gfwlist dst -j TPROXY --on-port 12345 --tproxy-mark 1
 	iptables -t mangle -A XRAY -m set --match-set Cloudflare dst -j RETURN
-	iptables -t mangle -A XRAY -m set --match-set China dst -j RETURN
 	iptables -t mangle -A XRAY -p udp -j TPROXY --on-port 12345 --tproxy-mark 1
 	iptables -t mangle -A XRAY -p tcp -j TPROXY --on-port 12345 --tproxy-mark 1
 	iptables -t mangle -A PREROUTING -j XRAY
@@ -45,12 +45,12 @@ add_ip_rules() {
 	iptables -t mangle -A XRAY_MASK -d 224.0.0.0/4 -j RETURN
 	iptables -t mangle -A XRAY_MASK -d 240.0.0.0/4 -j RETURN
 	iptables -t mangle -A XRAY_MASK -d 255.255.255.255/32 -j RETURN
+	iptables -t mangle -A XRAY_MASK -m set --match-set China dst -j RETURN
 	iptables -t mangle -A XRAY_MASK -p udp -m set --match-set forceproxy dst -j MARK --set-mark 1
 	iptables -t mangle -A XRAY_MASK -p tcp -m set --match-set forceproxy dst -j MARK --set-mark 1
 	iptables -t mangle -A XRAY_MASK -p udp -m set --match-set gfwlist dst -j MARK --set-mark 1
 	iptables -t mangle -A XRAY_MASK -p tcp -m set --match-set gfwlist dst -j MARK --set-mark 1
 	iptables -t mangle -A XRAY_MASK -m set --match-set Cloudflare dst -j RETURN
-	iptables -t mangle -A XRAY_MASK -m set --match-set China dst -j RETURN
 	iptables -t mangle -A XRAY_MASK -j RETURN -m mark --mark 0xff
 	iptables -t mangle -A XRAY_MASK -p udp -j MARK --set-mark 1
 	iptables -t mangle -A XRAY_MASK -p tcp -j MARK --set-mark 1
